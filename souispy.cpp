@@ -2,7 +2,7 @@
 //
 
 #include "stdafx.h"
-
+#include <SouiFactory.h>
 #include "MainDlg.h"
 
 //#define RES_TYPE 0   //从文件中加载资源
@@ -21,7 +21,7 @@ int WINAPI _tWinMain(HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR /*
     SASSERT(SUCCEEDED(hRes));
     
     int nRet = 0; 
-
+	SouiFactory souiFac;
     SComMgr *pComMgr = new SComMgr;
 
     //将程序的运行路径修改到项目所在目录所在的目录
@@ -47,7 +47,7 @@ int WINAPI _tWinMain(HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR /*
         if(hSysResource)
         {
             CAutoRefPtr<IResProvider> sysSesProvider;
-            CreateResProvider(RES_PE,(IObjRef**)&sysSesProvider);
+            sysSesProvider.Attach(souiFac.CreateResProvider(RES_PE));
             sysSesProvider->Init((WPARAM)hSysResource,0);
             theApp->LoadSystemNamedResource(sysSesProvider);
         }
@@ -55,14 +55,14 @@ int WINAPI _tWinMain(HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR /*
         	
         CAutoRefPtr<IResProvider>   pResProvider;
 #if (RES_TYPE == 0)
-        CreateResProvider(RES_FILE,(IObjRef**)&pResProvider);
+		pResProvider.Attach(souiFac.CreateResProvider(RES_FILE));
         if(!pResProvider->Init((LPARAM)_T("uires"),0))
         {
             SASSERT(0);
             return 1;
         }
 #else 
-        CreateResProvider(RES_PE,(IObjRef**)&pResProvider);
+		pResProvider.Attach(souiFac.CreateResProvider(RES_PE));
         pResProvider->Init((WPARAM)hInstance,0);
 #endif
 

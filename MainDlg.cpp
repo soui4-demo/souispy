@@ -95,7 +95,7 @@ void CMainDlg::EnumSwnd( HWND hHost ,DWORD dwSwnd, HSTREEITEM hItem)
             SStringW str;
             str.Format(L"class:%s,swnd:%d,name:%s",swndInfo.szClassName,swndInfo.swnd,swndInfo.szName[0]==0?L"[undef]":swndInfo.szName);
             int iIcon = swndInfo.bVisible?0:1;
-            HSTREEITEM hChild=m_pTreeCtrl->InsertItem((LPCTSTR)S_CW2T(str),iIcon,iIcon,(LPARAM)swndInfo.swnd,hItem,STVI_LAST,FALSE);
+            HSTREEITEM hChild=m_pTreeCtrl->InsertItem((LPCTSTR)S_CW2T(str),iIcon,iIcon,(LPARAM)swndInfo.swnd,hItem,STVI_LAST);
             EnumSwnd(hHost,dwChild,hChild);
         }
         dwChild = ::SendMessage(hHost,SPYMSG_SWNDENUM,dwChild,GSW_NEXTSIBLING);
